@@ -1,2 +1,2 @@
-# eht_gateway
-a hold place for EHT gateway related: https://eht.scigap.org
+# EHT Gateway
+A hold place for EHT gateway related: https://eht.scigap.org
