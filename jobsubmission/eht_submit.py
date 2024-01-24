@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
     input data:
         -- ehtdata: EHT HDF5 Data: torus.out0.05992.h5,torus.out0.05993.h5,torus.out0.05994.h5
