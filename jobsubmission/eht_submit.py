@@ -60,11 +60,7 @@ def parse_arguments():
     parser.add_argument("rr", type=str, help="Rhigh-Ratio")
     parser.add_argument("tva", type=str, help="Theta-Viewing-Angle")
     parser.add_argument("rdm", type=str, help="rho0-density-normalization")
-    try:
-        return parser.parse_args()
-    except TypeError:
-        parser.print_help()
-        sys.exit()
+    return parser.parse_args()
 
 def parse_values(astr):
     """parse three type of inputs
@@ -105,7 +101,12 @@ def main():
     # dump input parameter to a json file
     print_input_parameters()
 
-    args = parse_arguments()
+    try:
+        args = parse_arguments()
+    except TypeError:
+        args.print_help()
+        sys.exit()
+
     alljobs = generate_alljobs(args)
     print(alljobs)
     print("total: ",len(alljobs))
