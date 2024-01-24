@@ -6,8 +6,11 @@
         -- tva: Theta-Viewing-Angle: 30
         -- rdm: rho0-density-normalization: 1.4705331615886175e+18
     positioned parameters:
-    python eht_submit.py ehtdata rr tva rdm
-    python eht_submit.py torus.out0.05992.h5,torus.out0.05993.h5 140,150,160 10:100:10 1.4705331615886175e+18
+        python eht_submit.py ehtdata rr tva rdm
+    a single job example
+        python eht_submit.py torus.out0.05992.h5  160 30 1.4705331615886175e+18
+    a multiple job example
+        python eht_submit.py torus.out0.05992.h5,torus.out0.05993.h5 140,150,160 10:100:10 1.4705331615886175e+18
 """
 
 
