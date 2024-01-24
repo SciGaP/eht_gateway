@@ -4,8 +4,9 @@
         -- rr: Rhigh-Ratio: 160
         -- tva: Theta-Viewing-Angle: 30
         -- rdm: rho0-density-normalization: 1.4705331615886175e+18
-    
-    python eht.py --ehtdata torus.out0.05992.h5,torus.out0.05993.h5 --rr 140,150,160 --tva 10:100:10 --rdm 1.4705331615886175e+18
+    positioned parameters:
+    python eht_submit.py ehtdata rr tva rdm
+    python eht_submit.py torus.out0.05992.h5,torus.out0.05993.h5 140,150,160 10:100:10 1.4705331615886175e+18
 """
 
 
@@ -55,11 +56,15 @@ def parse_arguments():
         Namespace object containing parsed arguments.
     """
     parser = argparse.ArgumentParser(description="My function description")
-    parser.add_argument("--ehtdata", type=str, required=True, help="ehtdata input files")
-    parser.add_argument("--rr", type=str, required=True, help="Rhigh-Ratio")
-    parser.add_argument("--tva", type=str, required=True, help="Theta-Viewing-Angle")
-    parser.add_argument("--rdm", type=str, required=True, help="rho0-density-normalization")
-    return parser.parse_args()
+    parser.add_argument("ehtdata", type=str, help="ehtdata input files")
+    parser.add_argument("rr", type=str, help="Rhigh-Ratio")
+    parser.add_argument("tva", type=str, help="Theta-Viewing-Angle")
+    parser.add_argument("rdm", type=str, help="rho0-density-normalization")
+    try:
+        return parser.parse_args()
+    except TypeError:
+        parser.print_help()
+        sys.exit()
 
 def parse_values(astr):
     """parse three type of inputs
