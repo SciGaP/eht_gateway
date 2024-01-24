@@ -43,7 +43,8 @@ def print_input_parameters():
     """
     Prints all the input parameters passed to the script.
     """
-    job_name = f"job_{generate_timestamp_string()}.json"
+
+    job_name = "job.json"
     job_json = os.path.join(workdir,job_name)
     with open(job_json, "w") as f:
         json.dump({f"arg_{i+1}": arg for i, arg in enumerate(sys.argv)},f)
