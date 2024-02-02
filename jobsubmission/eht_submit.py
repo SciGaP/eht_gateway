@@ -130,10 +130,11 @@ def generate_batch(joblist):
     for job in joblist:
         # inputh5,md5,namepart, Rhigh, inclination, rho0
         inputh5 = job[0]
+        inputh5_path = os.path.join(h5folder,inputh5)
         md5 = md5s[inputh5]
         namepart = inputh5.split(".")[2]
         rhigh,inclination, rho0 = job[1:]
-        batchdata.append([inputh5,md5,namepart,rhigh,inclination,rho0])
+        batchdata.append([inputh5_path,md5,namepart,rhigh,inclination,rho0])
 
     # write the list to file
     with open(os.path.join(parfolder,par_all), 'w', newline='') as file:
