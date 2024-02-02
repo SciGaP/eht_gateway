@@ -144,6 +144,22 @@ def generate_batch(joblist):
         writer = csv.writer(file,delimiter=',')
         writer.writerows(batchdata)    
 
+def cleanout():
+    """clean some folders if necessary"""
+    
+    # there three folder need to be cleaned 
+    folderlist=["log","out","par"]
+    for folder in folderlist:
+        try:
+            folder_path = os.path.join(workdir,folder)
+            files = os.listdir(folder_path)
+            for file in files:
+                file_path = os.path.join(folder_path,file)
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+        except OSError:
+            print("Error occurred while deleting ", folder_path)
+            
 def submit_jobs():
     """submit jobs"""
 
@@ -163,6 +179,7 @@ def main():
     alljobs = generate_alljobs(args)
     print(alljobs)
     print("total: ",len(alljobs))
+    cleanout()
     generate_batch(alljobs)
     submit_jobs()
 
