@@ -17,11 +17,28 @@
 import sys
 import json
 import os
+import csv
 from datetime import datetime
 import argparse
 import itertools
 
 workdir = "./"
+# md5 is from GRMHD_kharma-v3/md5/md5_Ma+0.94_w5.tsv
+md5s = {
+"torus.out0.05990.h5":	"b9e0afbecddda32ef5db0a9e62b615c4",
+"torus.out0.05991.h5":	"5a9937884a8d9fb0c25216630357cdd8",
+"torus.out0.05992.h5":	"958f170bcca33a9d5781f1517e95a3b2",
+"torus.out0.05993.h5":	"af523f603eb619945acd7427c345b17c",
+"torus.out0.05994.h5":	"f49e41fd33d7e9cf83eab6d5ac620e36",
+"torus.out0.05995.h5":	"02632c573489f2dcfa1c91d54d2780f4",
+"torus.out0.05996.h5":	"3574d138e63a7f4cdc6d1fd01f0ada56",
+"torus.out0.05997.h5":	"f5658f308936d9e90ca0724487b25950",
+"torus.out0.05998.h5":	"3263ce053a165dae8ac437b28ceadfce",
+"torus.out0.05999.h5":	"cc2a5705eede5415dbd92bd4406eb1c1"
+}
+# h5 file folder
+h5folder = os.path.expanduser("~/GRMHD_kharma-v3/Ma+0.94_w5/") 
+
 
 def generate_timestamp_string():
     """
@@ -102,9 +119,31 @@ def generate_alljobs(paras):
     para_combines = itertools.product(*listoflists)
     return list(para_combines)
 
+def generate_batch(joblist):
+    '''generate BATCH.ALL'''
+
+    parfolder = os.path.join(workdir,"par")
+    par_all = "BATCH.ALL"
+    par_d00 = "BATCH.DOO"
+
+    batchdata = []
+    for job in joblist:
+        # inputh5,md5,namepart, Rhigh, inclination, rho0
+        inputh5 = job[0]
+        md5 = md5s[inputh5]
+        namepart = inputh5.split(".")[2]
+        rhigh,inclination, rho0 = job[1:]
+        batchdata.append([inputh5,md5,namepart,rhigh,inclination,rho0])
+
+    # write the list to file
+    with open(os.path.join(parfolder,par_all), 'w', newline='') as file:
+        writer = csv.writer(file,delimiter=',')
+        writer.writerows(batchdata)    
+
+
 def main():
     # dump input parameter to a json file
-    print_input_parameters()
+    #print_input_parameters()
 
     try:
         args = parse_arguments()
@@ -115,6 +154,7 @@ def main():
     alljobs = generate_alljobs(args)
     print(alljobs)
     print("total: ",len(alljobs))
+    generate_batch(alljobs)
 
 if __name__ == "__main__":
     main()
