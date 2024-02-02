@@ -36,9 +36,12 @@ md5s = {
 "torus.out0.05998.h5":	"3263ce053a165dae8ac437b28ceadfce",
 "torus.out0.05999.h5":	"cc2a5705eede5415dbd92bd4406eb1c1"
 }
+
 # h5 file folder
 h5folder = os.path.expanduser("~/GRMHD_kharma-v3/Ma+0.94_w5/") 
 
+# job submission command
+submit_cmd = "bin/batches"
 
 def generate_timestamp_string():
     """
@@ -141,6 +144,11 @@ def generate_batch(joblist):
         writer = csv.writer(file,delimiter=',')
         writer.writerows(batchdata)    
 
+def submit_jobs():
+    """submit jobs"""
+
+    import subprocess
+    subprocess.run(submit_cmd,shell=True)
 
 def main():
     # dump input parameter to a json file
@@ -156,6 +164,7 @@ def main():
     print(alljobs)
     print("total: ",len(alljobs))
     generate_batch(alljobs)
+    submit_jobs()
 
 if __name__ == "__main__":
     main()
