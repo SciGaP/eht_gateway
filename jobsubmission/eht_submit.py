@@ -56,8 +56,9 @@ def generate_timestamp_string():
     second = now.second
 
     # Pad single-digit values with zeros
-    timestamp_string = f"{year:04d}-{month:02d}-{day:02d}_{hour:02d}-{minute:02d}-{second:02d}"
-
+    #timestamp_string = f"{year:04d}-{month:02d}-{day:02d}_{hour:02d}-{minute:02d}-{second:02d}"
+    timestamp_string = datetime.datetime.now().isoformat()
+    
     return timestamp_string
 
 def print_input_parameters():
