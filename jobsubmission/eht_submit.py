@@ -152,11 +152,14 @@ def cleanout():
     for folder in folderlist:
         try:
             folder_path = os.path.join(workdir,folder)
-            files = os.listdir(folder_path)
-            for file in files:
-                file_path = os.path.join(folder_path,file)
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
+            if os.path.exists(folder_path):
+                files = os.listdir(folder_path)
+                for file in files:
+                    file_path = os.path.join(folder_path,file)
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+            else:
+                os.mkdir(folder_path)
         except OSError:
             print("Error occurred while deleting ", folder_path)
             
