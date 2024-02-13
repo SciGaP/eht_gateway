@@ -130,16 +130,13 @@ def copy_submitfolder():
 
     cwd = os.getcwd()
     print(f"copy to {cwd}")
+    print(os.listdir(cwd))
     cmd = f"cp -pr {submit_folder}/* {cwd}"
     os.system(cmd)
 
 def generate_batch(joblist):
     '''generate BATCH.ALL'''
 
-    print(os.getcwd())
-    print(os.listdir(os.getcwd()))
-    print(os.listdir())
-    #copy_submitfolder()
     parfolder = os.path.join(workdir,"par")
     par_all = "BATCH.ALL"
     par_d00 = "BATCH.DOO"
@@ -196,6 +193,10 @@ def main():
     alljobs = generate_alljobs(args)
     print(alljobs)
     print("total: ",len(alljobs))
+    print(os.getcwd())
+    print(os.listdir(os.getcwd()))
+    copy_submitfolder()
+
     cleanout()
     generate_batch(alljobs)
     submit_jobs()
