@@ -136,6 +136,8 @@ def copy_submitfolder():
 def generate_batch(joblist):
     '''generate BATCH.ALL'''
 
+    print(os.getcwd())
+    print(os.listdir(os.getcwd()))
     print(os.listdir())
     #copy_submitfolder()
     parfolder = os.path.join(workdir,"par")
