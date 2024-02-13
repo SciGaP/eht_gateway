@@ -23,7 +23,7 @@ import argparse
 import itertools
 import subprocess
 
-workdir = "./"
+workdir = "~/ospool_test"
 # md5 is from GRMHD_kharma-v3/md5/md5_Ma+0.94_w5.tsv
 md5s = {
 "torus.out0.05990.h5":	"b9e0afbecddda32ef5db0a9e62b615c4",
@@ -195,11 +195,11 @@ def main():
     print("total: ",len(alljobs))
     print(os.getcwd())
     print(os.listdir(os.getcwd()))
-    copy_submitfolder()
+    #copy_submitfolder()
 
     cleanout()
     generate_batch(alljobs)
-    submit_jobs()
+    #submit_jobs()
 
 if __name__ == "__main__":
     main()
