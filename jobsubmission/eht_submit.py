@@ -21,9 +21,8 @@ import csv
 from datetime import datetime
 import argparse
 import itertools
-import subprocess
 
-workdir = "~/ospool_test"
+workdir = "./"
 # md5 is from GRMHD_kharma-v3/md5/md5_Ma+0.94_w5.tsv
 md5s = {
 "torus.out0.05990.h5":	"b9e0afbecddda32ef5db0a9e62b615c4",
@@ -41,8 +40,6 @@ md5s = {
 # h5 file folder
 h5folder = os.path.expanduser("~/GRMHD_kharma-v3/Ma+0.94_w5/") 
 
-# submit scripts folder
-submit_folder = "~/ospool_test"
 # job submission command
 submit_cmd = "bin/batches"
 
@@ -125,15 +122,6 @@ def generate_alljobs(paras):
     para_combines = itertools.product(*listoflists)
     return list(para_combines)
 
-def copy_submitfolder():
-    """copy submit folder to the working dir"""
-
-    cwd = os.getcwd()
-    print(f"copy to {cwd}")
-    print(os.listdir(cwd))
-    cmd = f"cp -pr {submit_folder}/* {cwd}"
-    os.system(cmd)
-
 def generate_batch(joblist):
     '''generate BATCH.ALL'''
 
@@ -178,6 +166,7 @@ def cleanout():
 def submit_jobs():
     """submit jobs"""
 
+    import subprocess
     subprocess.run(submit_cmd,shell=True)
 
 def main():
@@ -193,13 +182,9 @@ def main():
     alljobs = generate_alljobs(args)
     print(alljobs)
     print("total: ",len(alljobs))
-    print(os.getcwd())
-    print(os.listdir(os.getcwd()))
-    #copy_submitfolder()
-
     cleanout()
     generate_batch(alljobs)
-    #submit_jobs()
+    submit_jobs()
 
 if __name__ == "__main__":
     main()
