@@ -128,7 +128,9 @@ def generate_alljobs(paras):
 def copy_submitfolder():
     """copy submit folder to the working dir"""
 
-    cmd = f"cp -pr {submit_folder}/* ."
+    cwd = os.getcwd()
+    print(f"copy to {cwd}")
+    cmd = f"cp -pr {submit_folder}/* {cwd}"
     os.system(cmd)
 
 def generate_batch(joblist):
