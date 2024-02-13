@@ -40,6 +40,8 @@ md5s = {
 # h5 file folder
 h5folder = os.path.expanduser("~/GRMHD_kharma-v3/Ma+0.94_w5/") 
 
+# submit scripts folder
+submit_folder = "/home/ehtbot/ospool_test"
 # job submission command
 submit_cmd = "bin/batches"
 
@@ -122,9 +124,16 @@ def generate_alljobs(paras):
     para_combines = itertools.product(*listoflists)
     return list(para_combines)
 
+def copy_submitfolder():
+    """copy submit folder to the working dir"""
+
+    cmd = f"cp -pr {submit_folder}/* ."
+    os.system(cmd)
+
 def generate_batch(joblist):
     '''generate BATCH.ALL'''
 
+    copy_submitfolder()
     parfolder = os.path.join(workdir,"par")
     par_all = "BATCH.ALL"
     par_d00 = "BATCH.DOO"
