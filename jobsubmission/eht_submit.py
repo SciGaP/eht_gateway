@@ -21,6 +21,7 @@ import csv
 from datetime import datetime
 import argparse
 import itertools
+import subprocess
 
 workdir = "./"
 # md5 is from GRMHD_kharma-v3/md5/md5_Ma+0.94_w5.tsv
@@ -41,7 +42,7 @@ md5s = {
 h5folder = os.path.expanduser("~/GRMHD_kharma-v3/Ma+0.94_w5/") 
 
 # submit scripts folder
-submit_folder = "/home/ehtbot/ospool_test"
+submit_folder = "~/ospool_test"
 # job submission command
 submit_cmd = "bin/batches"
 
@@ -128,7 +129,7 @@ def copy_submitfolder():
     """copy submit folder to the working dir"""
 
     cmd = f"cp -pr {submit_folder}/* ."
-    os.system(cmd, shell=True)
+    os.system(cmd)
 
 def generate_batch(joblist):
     '''generate BATCH.ALL'''
@@ -175,7 +176,6 @@ def cleanout():
 def submit_jobs():
     """submit jobs"""
 
-    import subprocess
     subprocess.run(submit_cmd,shell=True)
 
 def main():
