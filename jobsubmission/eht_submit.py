@@ -40,6 +40,9 @@ md5s = {
 # h5 file folder
 h5folder = os.path.expanduser("~/GRMHD_kharma-v3/Ma+0.94_w5/") 
 
+# change to the working directory
+os.chdir("ospool_test")
+
 # job submission command
 submit_cmd = "bin/batches"
 
