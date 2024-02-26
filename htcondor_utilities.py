@@ -3,6 +3,12 @@
         -- assitant function to connect to osg node
         -- job submission
         -- job status report
+    
+    configuation:
+        .env contains ssh connection parameters
+            put it the values for the following keys:
+                - userA,sshA,keyA,passA
+                - userB,sshB,keyB,passB
 """
 
 import os
