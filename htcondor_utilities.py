@@ -75,7 +75,7 @@ def job_submission(paras,dryrun=False):
 
     from jobsubmission.eht_submit import alljobs_dict
     all_jobs =alljobs_dict(paras)
-    
+
     if dryrun:
         print("total jobs: ", len(all_jobs))
         print("ready to submit")
@@ -92,7 +92,7 @@ def job_submission(paras,dryrun=False):
 
     return
 
-def run_testjob():
+def run_testjob(submit=False):
     """a test case"""
     job_paras = {}    
     job_paras["ehtdata"] = "torus.out0.05992.h5,torus.out0.05993.h5,torus.out0.05994.h5,torus.out0.05995.h5,torus.out0.05996.h5"
@@ -100,7 +100,16 @@ def run_testjob():
     job_paras["tva"] = "30,50,60,70,80,90"
     job_paras["rdm"] = "4.266338570441294e+17"
 
-    job_submission(job_paras, dryrun=True)
+    print("A test case with the following parameters:")
+    print("Ehtdata: ", job_paras["ehtdata"])
+    print("Rhigh-Ratio: ", job_paras["rr"])
+    print("Theta-Viewing-Angle: ", job_paras["tva"])
+    print("Rho0-Density-Normalization: ", job_paras["rdm"])
+    
+    dryrun = True
+    if submit:
+        dryrun = False
+    job_submission(job_paras, dryrun=dryrun)
 
 def main():
     """test the routines"""
@@ -111,7 +120,7 @@ def main():
     status = htcondor_status()
     print(status)
 
-    run_testjob()
+    run_testjob(submit=False)
 
 if __name__ == "__main__":
     sys.exit(main())
