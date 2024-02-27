@@ -17,6 +17,7 @@ import sys
 from dotenv import load_dotenv
 from fabric import Connection
 import re
+from datetime import datetime
 
 # load server setup
 load_dotenv()
@@ -69,6 +70,7 @@ def htcondor_status():
     """
 
     #condor_q = run_ssh_cmd("condor_q")
+    #condor_q = condor_q.stdout
     condor_q = """-- Schedd: ospool-eht.chtc.wisc.edu : <128.105.68.10:9618?... @ 02/27/24 10:03:25
 OWNER  BATCH_NAME    SUBMITTED   DONE   RUN    IDLE   HOLD  TOTAL JOB_IDS
 ehtbot ID: 70       2/27 09:31    184    112      _      4    300 70.0-272
@@ -77,7 +79,7 @@ Total for query: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 
 Total for ehtbot: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended 
 Total for all users: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended
 """
-    print(condor_q)
+    #print(condor_q)
     ehtbot_status = [x for x in condor_q.split("\n") if x.strip().startswith('ehtbot')]
     if len(ehtbot_status) == 0:
         print("no job is running.")
@@ -104,7 +106,6 @@ Total for all users: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 he
     
     return status
 
-    return
     # this is for the remaining jobs
     # status_line = [x for x in condor_q.stdout.split("\n") if "Total for query" in x]
     # if status_line == []:
@@ -116,6 +117,22 @@ Total for all users: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 he
     # keys = ["jobs", "completed", "removed", "idle", "running", "held", "suspended"]
     # status = dict(zip(keys, numbers))
     #return status
+
+def visual_htcondor_status():
+    """visualize htcondor_status"""
+
+    # get status 
+    status = htcondor_status()
+    print(f"JobID: {status['ID']}, Total: {status['TOTAL']}, Submit Time: {status['SUBMITTED']}")
+    
+    now = datetime.now()
+    current_time = now.strftime("%m/%d %H:%M")
+    print(f"status report @ {current_time}")
+    print("Done: ","*"*status['DONE'])
+    print("Run: ", "*"*status['RUN'])
+    print("Idle: ", "*"*status['IDLE'])
+    print("Hold: ", "*"*status['HOLD'])
+    
 
 def job_submission(paras,dryrun=False):
     """submit a job with paras"""
