@@ -70,12 +70,15 @@ def htcondor_status():
     status = dict(zip(keys, numbers))
     return status
 
-def job_submission(paras):
+def job_submission(paras,dryrun=False):
     """submit a job with paras"""
 
     from jobsubmission.eht_submit import alljobs_dict
     all_jobs =alljobs_dict(paras)
-    print("total jobs: ", len(all_jobs))
+    if dryrun:
+        print("total jobs: ", len(all_jobs))
+        print("ready to submit")
+        return
 
 def run_testjob():
     """a test case"""
@@ -85,7 +88,7 @@ def run_testjob():
     job_paras["tva"] = "30,50,60,70,80,90"
     job_paras["rdm"] = "4.266338570441294e+17"
 
-    job_submission(job_paras)
+    job_submission(job_paras, dryrun=True)
 
 def main():
     """test the routines"""
