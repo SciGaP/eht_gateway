@@ -75,10 +75,22 @@ def job_submission(paras,dryrun=False):
 
     from jobsubmission.eht_submit import alljobs_dict
     all_jobs =alljobs_dict(paras)
+    
     if dryrun:
         print("total jobs: ", len(all_jobs))
         print("ready to submit")
         return
+    
+    script = os.getenv("script")
+    ehtdata = paras['ehtdata']
+    rr = paras['rr']
+    tva = paras['tva']
+    rdm = paras['rdm']
+    submitcmd = f"{script} {ehtdata} {rr} {tva} {rdm}"
+    output = run_ssh_cmd(submitcmd)
+    print(output.stdout)
+
+    return
 
 def run_testjob():
     """a test case"""
