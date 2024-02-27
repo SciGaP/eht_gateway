@@ -56,19 +56,66 @@ def extract_numbers_from_line(line):
 
 
 def htcondor_status():
-    """query the htcondor status"""
+    """query the htcondor status
+    
+    -- Schedd: ospool-eht.chtc.wisc.edu : <128.105.68.10:9618?... @ 02/27/24 10:03:25
+    OWNER  BATCH_NAME    SUBMITTED   DONE   RUN    IDLE   HOLD  TOTAL JOB_IDS
+    ehtbot ID: 70       2/27 09:31    184    112      _      4    300 70.0-272
 
-    condor_q = run_ssh_cmd("condor_q")
-    status_line = [x for x in condor_q.stdout.split("\n") if "Total for query" in x]
-    if status_line == []:
-        print("job status is not available, try it later.")
+    Total for query: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended 
+    Total for ehtbot: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended 
+    Total for all users: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended
+    
+    """
+
+    #condor_q = run_ssh_cmd("condor_q")
+    condor_q = """-- Schedd: ospool-eht.chtc.wisc.edu : <128.105.68.10:9618?... @ 02/27/24 10:03:25
+OWNER  BATCH_NAME    SUBMITTED   DONE   RUN    IDLE   HOLD  TOTAL JOB_IDS
+ehtbot ID: 70       2/27 09:31    184    112      _      4    300 70.0-272
+
+Total for query: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended 
+Total for ehtbot: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended 
+Total for all users: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended
+"""
+    print(condor_q)
+    ehtbot_status = [x for x in condor_q.split("\n") if x.strip().startswith('ehtbot')]
+    if len(ehtbot_status) == 0:
+        print("no job is running.")
         return
-    # "Total for query: 50 jobs; 40 completed, 2 removed, 3 idle, 2 running, 2 held, 1 suspended"
-    status_line = status_line[0]
-    numbers = extract_numbers_from_line(status_line)
-    keys = ["jobs", "completed", "removed", "idle", "running", "held", "suspended"]
-    status = dict(zip(keys, numbers))
+    ehtbot_status = ehtbot_status[0]
+    raw = ehtbot_status.replace("_","0").split()
+    # ['ehtbot', 'ID:', '70', '2/27', '09:31', '184', '112', '_', '4', '300', '70.0-272']
+    jobid = raw[2]
+    jobtime = raw[3]+" " + raw[4]
+    jobdone = int(raw[5])
+    jobrun = int(raw[6])
+    jobidle = int(raw[7])
+    jobhold = int(raw[8])
+    jobtotal = int(raw[9])
+
+    status = {}
+    status['ID'] = jobid
+    status['SUBMITTED'] = jobtime
+    status['DONE'] = jobdone
+    status['RUN'] = jobrun
+    status['IDLE'] = jobidle
+    status['HOLD'] = jobhold
+    status['TOTAL'] = jobtotal
+    
     return status
+
+    return
+    # this is for the remaining jobs
+    # status_line = [x for x in condor_q.stdout.split("\n") if "Total for query" in x]
+    # if status_line == []:
+    #     print("job status is not available, try it later.")
+    #     return
+    # # "Total for query: 50 jobs; 40 completed, 2 removed, 3 idle, 2 running, 2 held, 1 suspended"
+    # status_line = status_line[0]
+    # numbers = extract_numbers_from_line(status_line)
+    # keys = ["jobs", "completed", "removed", "idle", "running", "held", "suspended"]
+    # status = dict(zip(keys, numbers))
+    #return status
 
 def job_submission(paras,dryrun=False):
     """submit a job with paras"""
@@ -105,7 +152,7 @@ def run_testjob(submit=False):
     print("Rhigh-Ratio: ", job_paras["rr"])
     print("Theta-Viewing-Angle: ", job_paras["tva"])
     print("Rho0-Density-Normalization: ", job_paras["rdm"])
-    
+
     dryrun = True
     if submit:
         dryrun = False
