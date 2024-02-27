@@ -70,6 +70,22 @@ def htcondor_status():
     status = dict(zip(keys, numbers))
     return status
 
+def job_submission(paras):
+    """submit a job with paras"""
+
+    from jobsubmission.eht_submit import alljobs_dict
+    all_jobs =alljobs_dict(paras)
+    print("total jobs: ", len(all_jobs))
+
+def run_testjob():
+    """a test case"""
+    job_paras = {}    
+    job_paras["ehtdata"] = "torus.out0.05992.h5,torus.out0.05993.h5,torus.out0.05994.h5,torus.out0.05995.h5,torus.out0.05996.h5"
+    job_paras["rr"] = "10:100:10"
+    job_paras["tva"] = "30,50,60,70,80,90"
+    job_paras["rdm"] = "4.266338570441294e+17"
+
+    job_submission(job_paras)
 
 def main():
     """test the routines"""
@@ -80,6 +96,7 @@ def main():
     status = htcondor_status()
     print(status)
 
+    run_testjob()
 
 if __name__ == "__main__":
     sys.exit(main())

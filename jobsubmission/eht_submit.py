@@ -40,8 +40,7 @@ md5s = {
 # h5 file folder
 h5folder = os.path.expanduser("~/GRMHD_kharma-v3/Ma+0.94_w5/") 
 
-# change to the working directory
-os.chdir("ospool_test")
+
 
 # job submission command
 submit_cmd = "bin/batches"
@@ -125,6 +124,22 @@ def generate_alljobs(paras):
     para_combines = itertools.product(*listoflists)
     return list(para_combines)
 
+def alljobs_dict(paras):
+    """ generate a list of the combination of all parameters"""
+
+    V = {}
+    for key, value in paras.items():
+        #print(key, value)
+        value_list = parse_values(value)
+        #print(value_list)
+        V[key] = value_list
+        print()
+
+    # use the name, and make sure the parameters are in the order
+    listoflists = [V["ehtdata"],V["rr"],V["tva"],V["rdm"]]
+    para_combines = itertools.product(*listoflists)
+    return list(para_combines)
+
 def generate_batch(joblist):
     '''generate BATCH.ALL'''
 
@@ -183,8 +198,10 @@ def main():
         sys.exit()
 
     alljobs = generate_alljobs(args)
-    print(alljobs)
+    #print(alljobs)
     print("total: ",len(alljobs))
+    # change to the working directory
+    os.chdir("ospool_test")
     cleanout()
     generate_batch(alljobs)
     submit_jobs()
