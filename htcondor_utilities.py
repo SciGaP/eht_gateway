@@ -142,8 +142,9 @@ def check_output():
     cmd = f"ls {outputdir}"
     response = run_ssh_cmd(cmd)
     h5list = response.stdout.split("\n")
-    h5list = [x for x in h5list if ".h5" in x]
-    print(h5list)
+    relist = [x for x in h5list if ".h5" in x]
+    #print(relist)
+    return relist
 
 def check_errorlog():
     """check the error log"""
