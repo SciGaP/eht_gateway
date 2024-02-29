@@ -118,7 +118,7 @@ Total for all users: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 he
     # status = dict(zip(keys, numbers))
     #return status
 
-def visual_htcondor_status():
+def check_htcondor_status():
     """visualize htcondor_status"""
 
     # get status 
@@ -127,11 +127,12 @@ def visual_htcondor_status():
     
     now = datetime.now()
     current_time = now.strftime("%m/%d %H:%M")
-    print(f"status report @ {current_time}")
-    print("Done: ","*"*status['DONE'])
-    print("Run: ", "*"*status['RUN'])
-    print("Idle: ", "*"*status['IDLE'])
-    print("Hold: ", "*"*status['HOLD'])
+    progress = status['DONE']/status['TOTAL']*100.0
+    print(f"status report {progress:.2f}% done @ {current_time}")
+    print(f"Done - {status['DONE']}: ","*"*status['DONE'])
+    print(f"Run - {status['RUN']}: ", "*"*status['RUN'])
+    print(f"Idle - {status['IDLE']}: ", "*"*status['IDLE'])
+    print(f"Hold - {status['HOLD']}: ", "*"*status['HOLD'])
     
 
 def job_submission(paras,dryrun=False):
@@ -185,6 +186,8 @@ def main():
     print(status)
 
     run_testjob(submit=False)
+
+    check_htcondor_status()
 
 if __name__ == "__main__":
     sys.exit(main())
