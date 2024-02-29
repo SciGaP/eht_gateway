@@ -135,6 +135,26 @@ def check_htcondor_status():
     print(f"Hold - {status['HOLD']}: ", "*"*status['HOLD'])
     
 
+def check_output():
+    """check the output file"""
+
+    outputdir = os.getenv("output")
+    cmd = f"ls {outputdir}"
+    response = run_ssh_cmd(cmd)
+    h5list = response.stdout.split("\n")
+    h5list = [x for x in h5list if ".h5" in x]
+    print(h5list)
+
+def check_errorlog():
+    """check the error log"""
+    logdir = os.getenv("log")
+    cmd = f"ls {logdir}"
+    response = run_ssh_cmd(cmd)
+    print(response)
+    errorlist = response.stdout.split("\n")
+    errorlist = [x for x in errorlist if ".err" in x]
+    print(errorlist)
+
 def job_submission(paras,dryrun=False):
     """submit a job with paras"""
 
@@ -188,6 +208,10 @@ def main():
     run_testjob(submit=False)
 
     check_htcondor_status()
+
+    check_output()
+
+    check_errorlog()
 
 if __name__ == "__main__":
     sys.exit(main())
