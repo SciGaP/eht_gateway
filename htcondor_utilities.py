@@ -49,14 +49,20 @@ def run_ssh_cmd(cmd_str):
     """run a command in ssh"""
 
     gateway, target_host = get_connection()
-    
+
     # Connect to the target host via the gateway
     with Connection(**target_host, gateway=Connection(**gateway)) as conn:
         result = conn.run(cmd_str, hide=True)
         return result
 
-def get_file():
+def get_file(remote_path, local_path):
     """download file from the sever"""
+    gateway, target_host = get_connection()
+
+    with Connection(**target_host, gateway=Connection(**gateway)) as conn:
+        result = conn.get(remote_path, local_path)
+        return result
+    
 
 def extract_numbers_from_line(line):
     """find all the numbers from line"""
@@ -154,15 +160,24 @@ def check_output():
     #print(relist)
     return relist
 
+def get_output(outputfile, localpath="."):
+    """download output file"""
+
+    outputdir = os.getenv("output")
+    remotefile = os.path.join(outputdir, outputfile)
+    localfile = os.path.join(localpath,outputfile)
+    response = get_file(remotefile,localfile)
+    print(response.local)
+    print("File transfer successful!")
+
 def check_errorlog():
     """check the error log"""
     logdir = os.getenv("log")
     cmd = f"ls {logdir}"
     response = run_ssh_cmd(cmd)
-    print(response)
     errorlist = response.stdout.split("\n")
-    errorlist = [x for x in errorlist if ".err" in x]
-    print(errorlist)
+    relist = [x for x in errorlist if ".err" in x]
+    return relist
 
 def job_submission(paras,dryrun=False):
     """submit a job with paras"""
@@ -218,9 +233,14 @@ def main():
 
     check_htcondor_status()
 
-    check_output()
+    h5list = check_output()
+    print(f"Total output: {len(h5list)}")
 
-    check_errorlog()
+    # get the first output
+    get_output(h5list[0])
+
+    #errorlist = check_errorlog()
+    #print(len(errorlist))
 
 if __name__ == "__main__":
     sys.exit(main())
