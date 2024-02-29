@@ -83,21 +83,20 @@ def htcondor_status():
     
     """
 
-    #condor_q = run_ssh_cmd("condor_q")
-    #condor_q = condor_q.stdout
-    condor_q = """-- Schedd: ospool-eht.chtc.wisc.edu : <128.105.68.10:9618?... @ 02/27/24 10:03:25
-OWNER  BATCH_NAME    SUBMITTED   DONE   RUN    IDLE   HOLD  TOTAL JOB_IDS
-ehtbot ID: 70       2/27 09:31    184    112      _      4    300 70.0-272
+    condor_q = run_ssh_cmd("condor_q")
+    condor_q = condor_q.stdout
+#     #condor_q = """-- Schedd: ospool-eht.chtc.wisc.edu : <128.105.68.10:9618?... @ 02/27/24 10:03:25
+# OWNER  BATCH_NAME    SUBMITTED   DONE   RUN    IDLE   HOLD  TOTAL JOB_IDS
+# ehtbot ID: 70       2/27 09:31    184    112      _      4    300 70.0-272
 
-Total for query: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended 
-Total for ehtbot: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended 
-Total for all users: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended
-"""
+# Total for query: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended 
+# Total for ehtbot: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended 
+# Total for all users: 116 jobs; 0 completed, 0 removed, 0 idle, 112 running, 4 held, 0 suspended
+# """
     #print(condor_q)
     ehtbot_status = [x for x in condor_q.split("\n") if x.strip().startswith('ehtbot')]
     if len(ehtbot_status) == 0:
-        print("no job is running.")
-        return
+        return None
     ehtbot_status = ehtbot_status[0]
     raw = ehtbot_status.replace("_","0").split()
     # ['ehtbot', 'ID:', '70', '2/27', '09:31', '184', '112', '_', '4', '300', '70.0-272']
@@ -137,6 +136,9 @@ def check_htcondor_status():
 
     # get status 
     status = htcondor_status()
+    if status == None:
+        print("no job is running!")
+        return 
     print(f"JobID: {status['ID']}, Total: {status['TOTAL']}, Submit Time: {status['SUBMITTED']}")
     
     now = datetime.now()
