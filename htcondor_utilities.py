@@ -22,9 +22,8 @@ from datetime import datetime
 # load server setup
 load_dotenv()
 
-
-def run_ssh_cmd(cmd_str):
-    """run a command in ssh"""
+def get_connection():
+    """get the parameters for the connection"""
 
     gateway = {
         "host": os.getenv("sshA"),
@@ -44,11 +43,20 @@ def run_ssh_cmd(cmd_str):
         },
     }
 
+    return [gateway, target_host]
+
+def run_ssh_cmd(cmd_str):
+    """run a command in ssh"""
+
+    gateway, target_host = get_connection()
+    
     # Connect to the target host via the gateway
     with Connection(**target_host, gateway=Connection(**gateway)) as conn:
         result = conn.run(cmd_str, hide=True)
         return result
 
+def get_file():
+    """download file from the sever"""
 
 def extract_numbers_from_line(line):
     """find all the numbers from line"""
