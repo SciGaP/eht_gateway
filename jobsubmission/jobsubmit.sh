@@ -17,7 +17,6 @@ cd jobs/"$1"/job
 # modify submit script
 # in bin/submit, replace batch_name = as batch_name = $1
 
-original_var="haha"
 new_var="\"$1\""
 #echo "$new_var"
 
